@@ -601,10 +601,9 @@ async function getChangedFilesFromGit(base, head, initialFetchDepth) {
             return await git.getChangesInLastCommit();
         }
         core.info(`Changes will be detected between ${baseSha} and ${head}..`);
-        return await git.getChanges(baseSha, head);
     }
     core.info(`Changes will be detected between ${base} and ${head}`);
-    return await git.getChangesSinceMergeBase(base, head, initialFetchDepth);
+    return await git.getChanges(baseSha, head);
 }
 // Uses github REST api to get list of files changed in PR
 async function getChangedFilesFromApi(token, prNumber) {
