@@ -555,7 +555,7 @@ async function getChangedFiles(token, base, ref, initialFetchDepth) {
     if (prEvents.includes(github.context.eventName)) {
         if (base) {
             // core.warning(`'base' input parameter is ignored when action is triggered by pull request event`);
-            return getChangedFilesFromGit(base, git.HEAD, initialFetchDepth);
+            return getChangedFilesFromGit(base, ref, initialFetchDepth);
         }
         const pr = github.context.payload.pull_request;
         if (token) {
@@ -600,22 +600,7 @@ async function getChangedFilesFromGit(base, head, initialFetchDepth) {
             }
             return await git.getChangesInLastCommit();
         }
-        // If there is no previously pushed commit,
-        // we will do comparison against the default branch or return all as added
-        if (baseSha === git.NULL_SHA) {
-            if (defaultBranch && base !== defaultBranch) {
-                core.info(`First push of a branch detected - changes will be detected against the default branch ${defaultBranch}`);
-                return await git.getChangesSinceMergeBase(defaultBranch, head, initialFetchDepth);
-            }
-            else {
-                core.info('Initial push detected - all files will be listed as added');
-                if (head !== currentRef) {
-                    core.warning(`Ref ${head} is not checked out - results might be incorrect!`);
-                }
-                return await git.listAllFilesAsAdded();
-            }
-        }
-        core.info(`Changes will be detected between ${baseSha} and ${head}`);
+        core.info(`Changes will be detected between ${baseSha} and ${head}..`);
         return await git.getChanges(baseSha, head);
     }
     core.info(`Changes will be detected between ${base} and ${head}`);
