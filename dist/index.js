@@ -557,7 +557,8 @@ async function getChangedFiles(token, base, ref, initialFetchDepth) {
             core.warning(`'ref' input parameter is ignored when 'base' is set to HEAD`);
         }
         if (base) {
-            core.warning(`'base' input parameter is ignored when action is triggered by pull request event`);
+            // core.warning(`'base' input parameter is ignored when action is triggered by pull request event`);
+            return getChangedFilesFromGit(base, ref, initialFetchDepth);
         }
         const pr = github.context.payload.pull_request;
         if (token) {
