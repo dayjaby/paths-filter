@@ -555,7 +555,7 @@ async function getChangedFiles(token, base, ref, initialFetchDepth) {
     if (prEvents.includes(github.context.eventName)) {
         if (base) {
             // core.warning(`'base' input parameter is ignored when action is triggered by pull request event`);
-            return getChangedFilesFromGit(base, ref, initialFetchDepth);
+            return getChangedFilesFromGit(base, git.HEAD, initialFetchDepth);
         }
         const pr = github.context.payload.pull_request;
         if (token) {
